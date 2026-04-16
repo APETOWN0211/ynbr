@@ -1,43 +1,55 @@
+/* 기본 설정: PC에서는 스크롤 방지 */
 html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-color: #000;
+  margin: 0; padding: 0;
+  width: 100%; height: 100%;
+  background-color: #000;
+  overflow-x: hidden;
+}
+
+/* PC 레이아웃: 한 화면 고정 */
+.layout-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden; 
+}
+
+/* --- 모바일/패드 반응형 스크롤 허용 --- */
+@media (max-width: 1024px) {
+  html, body {
+    overflow-y: auto !important; /* 세로 스크롤 강제 허용 */
+    height: auto;
   }
-  
+
   .layout-container {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-  }
-  
-  .layout-column {
-    display: flex;
-    flex-direction: column;
-    flex: 1; /* 33.33%씩 자동 배분 */
-    height: 100%;
-  }
-  
-  .photo-box {
-    width: 100%;
-    overflow: hidden;
-  }
-  
-  /* 좌/우측 3등분 */
-  .row-3 {
-    flex: 1;
-  }
-  
-  /* 중앙 전체 높이 */
-  .full-height {
-    height: 100%;
-  }
-  
-  .photo-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
     display: block;
+    height: auto; /* 높이 고정 해제 */
+    overflow-y: visible; /* 자식 요소들에 맞춰 늘어나도록 설정 */
   }
+
+  .content-wrapper {
+    flex-direction: column;
+    height: auto; /* 내용물만큼 늘어남 */
+  }
+
+  .layout-column {
+    width: 100%;
+    height: auto;
+  }
+
+  .photo-box {
+    height: 70vh; /* 사진 한 장이 화면의 70% 정도 차지 (취향껏 조절 가능) */
+    width: 100%;
+  }
+
+  /* 중앙 로고 레이어: 스크롤해도 중앙에 떠 있게 설정 */
+  .logo-overlay {
+    position: fixed; /* 고정 */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    width: 90%;
+    pointer-events: none;
+  }
+}
