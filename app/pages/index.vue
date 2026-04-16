@@ -22,8 +22,7 @@
       <div class="photo-box row-3"><img src="/images/mr2.png" alt="Right 2"></div>
       <div class="photo-box row-3"><img src="/images/mr3.png" alt="Right 3"></div>
     </section>
-
-    <AppFooter />
+       <AppFooter />
   </main>
 </template>
 
@@ -35,6 +34,7 @@ let ctx, animationFrame;
 const dots = [];
 const mouse = { x: -1000, y: -1000 };
 
+// Y자 형태를 구성하는 상대 좌표 데이터 (도트 배치)
 const yMap = [
   {x:-2, y:-3}, {x:2, y:-3}, {x:-1.5, y:-2.25}, {x:1.5, y:-2.25},
   {x:-1, y:-1.5}, {x:1, y:-1.5}, {x:-0.5, y:-0.75}, {x:0.5, y:-0.75},
@@ -43,17 +43,19 @@ const yMap = [
 
 class Dot {
   constructor(offsetX, offsetY) {
-    this.offsetX = offsetX * 25;
+    this.offsetX = offsetX * 25; // 도트 간격 조절
     this.offsetY = offsetY * 25;
     this.x = Math.random() * window.innerWidth;
     this.y = Math.random() * window.innerHeight;
-    this.size = Math.random() * 4 + 4;
+    this.size = Math.random() * 4 + 4; // 도트 크기
+    this.friction = 0.85; // 부드러운 움직임 계수
     this.ease = 0.12;
   }
 
   update() {
     const targetX = mouse.x + this.offsetX;
     const targetY = mouse.y + this.offsetY;
+    
     this.x += (targetX - this.x) * this.ease;
     this.y += (targetY - this.y) * this.ease;
   }
@@ -61,8 +63,9 @@ class Dot {
   draw() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = '#FC008A';
+    ctx.fillStyle = '#FC008A'; // 요청하신 색상
     ctx.fill();
+    // 약간의 글로우 효과
     ctx.shadowBlur = 10;
     ctx.shadowColor = '#FC008A';
   }
@@ -83,16 +86,17 @@ const handleMouseMove = (e) => {
 };
 
 const handleResize = () => {
-  if (canvas.value) {
-    canvas.value.width = window.innerWidth;
-    canvas.value.height = window.innerHeight;
-  }
+  canvas.value.width = window.innerWidth;
+  canvas.value.height = window.innerHeight;
 };
 
 onMounted(() => {
   ctx = canvas.value.getContext('2d');
   handleResize();
+  
+  // Y자 도트 생성
   yMap.forEach(pos => dots.push(new Dot(pos.x, pos.y)));
+
   window.addEventListener('mousemove', handleMouseMove);
   window.addEventListener('resize', handleResize);
   animate();
@@ -120,6 +124,7 @@ html, body {
   height: 100vh;
 }
 
+/* 캔버스 스타일: 마우스 클릭이 아래 요소에 전달되도록 설정 */
 .dot-canvas {
   position: fixed;
   top: 0; left: 0;
@@ -136,8 +141,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   z-index: 20;
-  /* 부동 요소들이 클릭을 막지 않도록 설정 */
-  pointer-events: none; 
+  pointer-events: none;
   width: 90%;
 }
 
@@ -149,9 +153,7 @@ html, body {
 }
 
 .gallery-link {
-  /* 부모의 none 설정을 무시하고 클릭을 활성화 */
-  pointer-events: auto !important; 
-  display: inline-block;
+ pointer-events: auto;
   margin-top: 40px;
   
   font-family: 'Helvetica', Arial, sans-serif;
@@ -161,8 +163,8 @@ html, body {
   text-decoration: underline;
   text-underline-offset: 8px;
   cursor: pointer;
-  
-  /* 네온 깜빡임 애니메이션 */
+
+  /* 네온 깜빡임 애니메이션 적용 */
   animation: neon-flicker 3s infinite;
 }
 
@@ -173,6 +175,7 @@ html, body {
   height: 100%;
 }
 
+/* 모바일 대응 반응형 */
 @media (max-width: 1024px) {
   .layout-container { flex-direction: column; height: auto; }
   .layout-column { width: 100%; height: 33.33vh; flex-direction: row; }
@@ -183,22 +186,28 @@ html, body {
 .full-height { height: 100%; }
 img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* 애니메이션 정의 */
 @keyframes neon-flicker {
   0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-    text-shadow: 0 0 12.3px #FB0187, 0 0 20px #FB0187, 0 0 30px #FB0187;
+    /* 불이 켜져 있을 때 (강한 핑크 쉐도우) */
+    text-shadow: 
+      0 0 12.3px #FB0187,
+      0 0 20px #FB0187,
+      0 0 30px #FB0187;
     opacity: 1;
   }
   20%, 22%, 24%, 55% {
+    /* 순간적으로 전압이 튀며 불이 꺼질 때 */
     text-shadow: none;
     opacity: 0.5;
   }
+  /* 중간에 아주 잠깐 흐려지는 구간 */
   80% {
     text-shadow: 0 0 5px #FB0187;
     opacity: 0.8;
   }
 }
 
+/* 마우스를 올렸을 때는 불빛이 지지직거리며 더 강해지는 효과 (선택사항) */
 .gallery-link:hover {
   animation: neon-flicker-intense 0.1s infinite;
 }
