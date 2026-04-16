@@ -1,0 +1,43 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000;
+  }
+  
+  .layout-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  .layout-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* 33.33%씩 자동 배분 */
+    height: 100%;
+  }
+  
+  .photo-box {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  /* 좌/우측 3등분 */
+  .row-3 {
+    flex: 1;
+  }
+  
+  /* 중앙 전체 높이 */
+  .full-height {
+    height: 100%;
+  }
+  
+  .photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
