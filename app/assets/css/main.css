@@ -13,6 +13,13 @@ html, body {
   height: 100vh;
   overflow: hidden; 
 }
+img{
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
 
 /* --- 모바일/패드 반응형 스크롤 허용 --- */
 @media (max-width: 1024px) {
